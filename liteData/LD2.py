@@ -5,17 +5,18 @@
 
 # Downloads images from the Google Landmarks dataset using multiple threads.
 # Images that already exist will not be downloaded again, so the script can
-# resume a partially completed download. All images will be saved in the JPG
-# format with 90% compression quality.
+# resume a partially completed download. All images will be save in the same format as source
+
+######### Only use this if LD don't work properly ##########
 
 import sys, os, multiprocessing, csv
 from PIL import Image
 from io import BytesIO
-from urllib.request import urlopen
+from urllib.request import urlretrieve
 
 ########## EDIT CONFIG HERE ##########
 CSV = 'ltrain.csv'
-outputFolder = 'train'
+outputFolder = 'E:/train'
 ########## EDIT CONFIG HERE ##########
 
 def ParseData(data_file):
@@ -27,35 +28,19 @@ def ParseData(data_file):
 
 def DownloadImage(key_url):
     (key, url) = key_url
+    print('downloading: ' + str(key))
     out_dir = outputFolder
     filename = os.path.join(out_dir, '%s.jpg' % key)
 
     if os.path.exists(filename):
         print('Image %s already exists. Skipping download.' % filename)
         return
-
     try:
-        response = urlopen(url)
-        image_data = response.read()
+        urlretrieve(url, filename)
     except:
         print('Warning: Could not download image %s from %s' % (key, url))
         return
-
-    try:
-        pil_image = Image.open(BytesIO(image_data))
-    except:
-        print('Warning: Failed to parse image %s' % key)
-        return
-    try:
-        pil_image_rgb = pil_image.convert('RGB')
-    except:
-        print('Warning: Failed to convert image %s to RGB' % key)
-        return
-    try:
-        pil_image_rgb.save(filename, format='JPEG', quality=90)
-    except:
-        print('Warning: Failed to save image %s' % filename)
-        return
+    print('done: ' + str(key))
 
 def Run():
     data_file = CSV
