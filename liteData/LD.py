@@ -11,11 +11,11 @@
 import sys, os, multiprocessing, csv
 from PIL import Image
 from io import BytesIO
-from urllib.request import urlretrieve
+from urllib.request import urlopen
 
 ########## EDIT CONFIG HERE ##########
 CSV = 'ltrain.csv'
-outputFolder = 'E:/train'
+outputFolder = 'train'
 ########## EDIT CONFIG HERE ##########
 
 def ParseData(data_file):
@@ -25,9 +25,8 @@ def ParseData(data_file):
   return key_url_list[1:]  # Chop off header
 
 
-def DownloadImage(key_url, data_file):
+def DownloadImage(key_url):
     (key, url) = key_url
-    print('downloading: ' + str(key))
     out_dir = outputFolder
     filename = os.path.join(out_dir, '%s.jpg' % key)
 
@@ -36,7 +35,8 @@ def DownloadImage(key_url, data_file):
         return
 
     try:
-        urlretrieve(url, data_file)
+        response = urlopen(url)
+        image_data = response.read()
     except:
         print('Warning: Could not download image %s from %s' % (key, url))
         return
@@ -56,7 +56,6 @@ def DownloadImage(key_url, data_file):
     except:
         print('Warning: Failed to save image %s' % filename)
         return
-    print('done: ' + str(key))
 
 def Run():
     data_file = CSV
@@ -66,7 +65,7 @@ def Run():
         os.mkdir(out_dir)
     key_url_list = ParseData(data_file)
     pool = multiprocessing.Pool(processes=50)
-    pool.map(DownloadImage, key_url_list, data_file)
+    pool.map(DownloadImage, key_url_list)
 
 if __name__ == '__main__':
     Run()
