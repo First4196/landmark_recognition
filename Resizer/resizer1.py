@@ -7,18 +7,24 @@
 ########## Set path here #########
 PATH = 'resized'
 ########## Set path here #########
-import cv2, os
+import cv2, os, multiprocessing
 
 
-def run():
-    for img in os.listdir():
-        if img[-1] != 'g': continue
-        print(img)
+def resize(img):
+    if img[-1] != 'g': return
+    #print(img)
+    try:
         image = cv2.imread(img)
         image = cv2.resize(image, (320, 240))
         cv2.imwrite(PATH+'/'+img, image)
-    print('done risizing!')
+        print('resized '+img)
+    except Exception as e:
+        print('error at: '+ img)
+        print(e)
+
 if __name__ == '__main__':
     if not os.path.exists(PATH):
         os.mkdir(PATH)
-    run()
+    pool = multiprocessing.Pool(processes=50)
+    pool.map(resize, os.listdir())
+    print('done resizing!!')

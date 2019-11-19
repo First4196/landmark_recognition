@@ -64,7 +64,7 @@ def Run():
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
     key_url_list = ParseData(data_file)
-    pool = multiprocessing.Pool(processes=50)
+    pool = multiprocessing.Pool(processes=6)
     pool.map(DownloadImage, key_url_list)
 
 if __name__ == '__main__':
