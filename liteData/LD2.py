@@ -7,6 +7,8 @@
 # Images that already exist will not be downloaded again, so the script can
 # resume a partially completed download. All images will be save in the same format as source
 
+######### Only use this if LD don't work properly ##########
+
 import sys, os, multiprocessing, csv
 from PIL import Image
 from io import BytesIO
