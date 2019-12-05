@@ -1,0 +1,5 @@
+gdrive_link
+https://drive.google.com/drive/folders/1EGfXdOxon5tdmiiZ7UEh2omh-tPRJjLM?usp=sharing
+
+resnet50 tutorial
+https://www.kaggle.com/suniliitb96/tutorial-keras-transfer-learning-with-resnet50
